@@ -62,6 +62,10 @@ export default function (socket, io) {
     io.to(data.to).emit("call accepted", data.signal);
   });
 
+  socket.on("end call", (id) => {
+    io.to(id).emit("end call");
+  });
+
   // //socket disconnect
   // socket.on("disconnect", () => {
   //   onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
