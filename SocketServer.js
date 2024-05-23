@@ -13,6 +13,8 @@ export default function (socket, io) {
     //send online users to frontend
 
     io.emit("get-online-users", onlineUsers);
+
+    io.emit("setup socket", socket.id);
   });
 
   socket.on("disconnect", () => {
@@ -43,6 +45,21 @@ export default function (socket, io) {
   socket.on("stop typing", (conversation) => {
     console.log("stop typing", conversation);
     socket.in(conversation).emit("stop typing");
+  });
+
+  socket.on("call user", (data) => {
+    let userId = data.userToCall;
+    let userSocketId = onlineUsers.find((user) => user.userId == userId);
+    io.to(userSocketId.socketId).emit("call user", {
+      signal: data.signal,
+      from: data.from,
+      name: data.name,
+      picture: data.picture,
+    });
+  });
+
+  socket.on("answer call", (data) => {
+    io.to(data.to).emit("call accepted", data.signal);
   });
 
   // //socket disconnect
