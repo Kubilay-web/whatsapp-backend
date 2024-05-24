@@ -69,6 +69,7 @@ export const getConversations = async (req, res, next) => {
     next(error);
   }
 };
+
 export const createGroup = async (req, res, next) => {
   const { name, users } = req.body;
   //add current user to users
@@ -95,6 +96,7 @@ export const createGroup = async (req, res, next) => {
       "users admin",
       "-password"
     );
+    console.log(populatedConvo);
     res.status(200).json(populatedConvo);
   } catch (error) {
     next(error);
